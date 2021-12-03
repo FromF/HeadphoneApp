@@ -13,11 +13,14 @@ struct HeadphoneView: View {
     var body: some View {
         VStack {
             if viewModel.isHeadphone {
-                Text("Audio Device: Headphone")
+                Image(systemName: "headphones")
+                    .font(.system(size: 100))
             } else if viewModel.isSpeaker {
-                Text("Audio Device: Speaker")
+                Image(systemName: "speaker.wave.2.fill")
+                    .font(.system(size: 100))
             } else {
-                Text("Audio Device: Unknown")
+                Image(systemName: "questionmark")
+                    .font(.system(size: 100))
             }
         }
     }
