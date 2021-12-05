@@ -18,6 +18,9 @@ struct HeadphoneView: View {
             } else if viewModel.isSpeaker {
                 Image(systemName: "speaker.wave.2.fill")
                     .font(.system(size: 100))
+            } else if viewModel.isExternalAudio {
+                Image(systemName: "hifispeaker.fill")
+                    .font(.system(size: 100))
             } else {
                 Image(systemName: "questionmark")
                     .font(.system(size: 100))

@@ -10,6 +10,7 @@ import AVFoundation
 
 class HeadphoneViewModel: ObservableObject {
     @Published var isSpeaker = false
+    @Published var isExternalAudio = false
     @Published var isHeadphone = false
     
     init() {
@@ -33,20 +34,39 @@ class HeadphoneViewModel: ObservableObject {
     }
     
     private func judgeHeadphone() {
+        isHeadphone = false
+        isExternalAudio = false
+        isSpeaker = false
         for component in AVAudioSession.sharedInstance().currentRoute.outputs {
             print(component)
-            if component.portType == AVAudioSession.Port.headphones ||
-                component.portType == AVAudioSession.Port.bluetoothA2DP ||
-                component.portType == AVAudioSession.Port.bluetoothLE ||
-                component.portType == AVAudioSession.Port.bluetoothHFP {
+            if component.portType == .headphones ||
+                component.portType == .bluetoothA2DP ||
+                component.portType == .bluetoothLE ||
+                component.portType == .bluetoothHFP ||
+                component.portType == .usbAudio
+            {
                 // イヤホン(Bluetooth含む)
                 isHeadphone = true
-                isSpeaker = false
-                return
+            }
+            if component.portType == .builtInReceiver ||
+                component.portType == .builtInSpeaker {
+                // 内蔵スピーカーはスピーカーとする
+                isSpeaker = true
+            }
+            if component.portType == .airPlay ||
+                component.portType == .HDMI ||
+                component.portType == .lineOut ||
+                component.portType == .AVB ||
+                component.portType == .displayPort ||
+                component.portType == .carAudio ||
+                component.portType == .fireWire ||
+                component.portType == .PCI ||
+                component.portType == .thunderbolt ||
+                component.portType == .virtual
+            {
+                //その他オーディオデバイスは外部出力扱いする
+                isExternalAudio = true
             }
         }
-        // イヤホン(Bluetooth含む)以外
-        isHeadphone = false
-        isSpeaker = true
     }
 }
